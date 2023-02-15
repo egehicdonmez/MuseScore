@@ -154,7 +154,7 @@ static Fraction getPlayTicksForBend(const Note* note)
 {
     Tie* tie = note->tieFor();
     if (!tie) {
-        return note->chord()->ticks();
+        return note->chord()->actualTicks();
     }
 
     Fraction stick = note->chord()->tick();
@@ -370,7 +370,7 @@ static void collectNote(EventMap* events, const Note* note, CollectNoteParams no
         }
 
         if (noteParams.letRingNote) {
-            off = noteParams.endLetRingTick;
+            off = std::max(off, noteParams.endLetRingTick);
         }
 
         // Get the velocity used for this note from the staff

@@ -23,7 +23,6 @@
 
 #include "log.h"
 #include "global/muversion.h"
-#include "config.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
@@ -279,7 +278,7 @@ void CommandLineController::apply()
     }
 
     // Video
-#ifdef BUILD_VIDEOEXPORT_MODULE
+#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     if (m_parser.isSet("score-video")) {
         application()->setRunMode(IApplication::RunMode::Converter);
         m_converterTask.type = ConvertType::ExportScoreVideo;

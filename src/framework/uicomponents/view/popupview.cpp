@@ -41,7 +41,6 @@
 #endif
 
 #include "log.h"
-#include "config.h"
 
 using namespace mu::uicomponents;
 
@@ -180,7 +179,7 @@ void PopupView::open()
         qWindow->setTitle(m_title);
         qWindow->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
         qWindow->setFlag(Qt::FramelessWindowHint, m_frameless);
-#ifdef UI_DISABLE_MODALITY
+#ifdef MUE_DISABLE_UI_MODALITY
         qWindow->setModality(Qt::NonModal);
 #endif
         m_window->setResizable(m_resizable);

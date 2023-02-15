@@ -98,8 +98,6 @@
 #include "accessibility/accessibleroot.h"
 #endif
 
-#include "config.h"
-
 #include "log.h"
 
 using namespace mu;
@@ -1987,12 +1985,6 @@ Segment* Score::firstSegment(SegmentType segType) const
             seg = seg->next1(segType);
         }
     }
-
-#ifdef SCRIPT_INTERFACE
-    // if called from QML/JS, tell QML engine not to garbage collect this object
-//      if (seg)
-//            QQmlEngine::setObjectOwnership(seg, QQmlEngine::CppOwnership);
-#endif
     return seg;
 }
 

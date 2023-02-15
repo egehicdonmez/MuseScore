@@ -22,8 +22,6 @@
 
 #include "appshell.h"
 
-#include "config.h"
-
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
@@ -112,7 +110,7 @@ int AppShell::run(int argc, char** argv)
 
 #if !defined(Q_OS_WIN) && !defined(Q_OS_DARWIN) && !defined(Q_OS_WASM)
     // Any OS that uses Freedesktop.org Desktop Entry Specification (e.g. Linux, BSD)
-    QGuiApplication::setDesktopFileName("org.musescore.MuseScore" INSTSUFFIX ".desktop");
+    QGuiApplication::setDesktopFileName("org.musescore.MuseScore" MUSESCORE_INSTALL_SUFFIX ".desktop");
 #endif
 
     // ====================================================
@@ -240,7 +238,7 @@ int AppShell::run(int argc, char** argv)
         //! NOTE Move ownership to UiEngine
         ui::UiEngine::instance()->moveQQmlEngine(engine);
 
-#ifdef QML_LOAD_FROM_SOURCE
+#ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
         const QUrl url(QString(appshell_QML_IMPORT) + mainQmlFile);
 #else
         const QUrl url(QStringLiteral("qrc:/qml") + mainQmlFile);

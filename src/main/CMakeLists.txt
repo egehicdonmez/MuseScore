@@ -54,9 +54,9 @@ if (OS_IS_WIN)
 
 elseif(OS_IS_LIN)
 
-    if (MSCORE_INSTALL_SUFFIX)
-        set(MSCORE_OUTPUT_NAME "${EXECUTABLE_NAME}${MSCORE_INSTALL_SUFFIX}")
-    endif(MSCORE_INSTALL_SUFFIX)
+    if (MUSESCORE_INSTALL_SUFFIX)
+        set(MSCORE_OUTPUT_NAME "${EXECUTABLE_NAME}${MUSESCORE_INSTALL_SUFFIX}")
+    endif(MUSESCORE_INSTALL_SUFFIX)
 
     set(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
     if (BUILD_SHARED_LIBS)
@@ -115,14 +115,6 @@ endif()
 ###########################################
 # Dependency library declaration
 ###########################################
-
-set(FREETYPE_LIB )
-if (USE_SYSTEM_FREETYPE)
-     set(FREETYPE_LIB ${FREETYPE_LIBRARIES})
-else (USE_SYSTEM_FREETYPE)
-     set(FREETYPE_LIB mscore_freetype)
-endif (USE_SYSTEM_FREETYPE)
-
 set(LINK_LIB
     ${QT_LIBRARIES}
     global
@@ -158,13 +150,12 @@ set(LINK_LIB
     )
 
 if (NOT CC_IS_EMSCRIPTEN)
-    list(APPEND LINK_LIB ${FREETYPE_LIB})
     list(APPEND LINK_LIB cloud)
     list(APPEND LINK_LIB languages)
     list(APPEND LINK_LIB plugins)
     list(APPEND LINK_LIB multiinstances)
 
-    if (BUILD_IMPORTEXPORT_MODULE)
+    if (MUE_BUILD_IMPORTEXPORT_MODULE)
         set(LINK_LIB ${LINK_LIB}
             iex_musicxml
             iex_bb
@@ -178,21 +169,23 @@ if (NOT CC_IS_EMSCRIPTEN)
             iex_audioexport
             iex_imagesexport
         )
+
+        if (MUE_BUILD_VIDEOEXPORT_MODULE)
+            list(APPEND LINK_LIB iex_videoexport)
+        endif()
     endif()
 
 endif()
 
-if (BUILD_VIDEOEXPORT_MODULE)
-    list(APPEND LINK_LIB iex_videoexport)
-endif()
 
-if (BUILD_AUTOBOT_MODULE)
+
+if (MUE_BUILD_AUTOBOT_MODULE) 
     list(APPEND LINK_LIB autobot)
 endif()
 
-if (BUILD_MUSESAMPLER_MODULE)
+if (MUE_BUILD_MUSESAMPLER_MODULE)
     list(APPEND LINK_LIB musesampler)
-endif(BUILD_MUSESAMPLER_MODULE)
+endif(MUE_BUILD_MUSESAMPLER_MODULE)
 
 set (MSCORE_APPEND_SRC)
 
@@ -271,10 +264,6 @@ else()
 
     find_package(Qt5QmlImportScanner REQUIRED)
     qt5_import_qml_plugins(mscore PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
-endif()
-
-if (OS_IS_MAC AND SPARKLE_ENABLED)
-    target_link_libraries(mscore ${SPARKLE_LIBRARY})
 endif()
 
 
@@ -384,10 +373,10 @@ elseif(OS_IS_LIN)
     if (LN_EXECUTABLE)
        add_custom_target(mscore_alias ALL
            COMMAND echo "Creating symlink alias for mscore executable."
-           COMMAND ${LN_EXECUTABLE} -sf "mscore${MSCORE_INSTALL_SUFFIX}" "musescore${MSCORE_INSTALL_SUFFIX}"
-           COMMAND echo 'Symlink alias: musescore${MSCORE_INSTALL_SUFFIX} -> mscore${MSCORE_INSTALL_SUFFIX}'
+           COMMAND ${LN_EXECUTABLE} -sf "mscore${MUSESCORE_INSTALL_SUFFIX}" "musescore${MUSESCORE_INSTALL_SUFFIX}"
+           COMMAND echo 'Symlink alias: musescore${MUSESCORE_INSTALL_SUFFIX} -> mscore${MUSESCORE_INSTALL_SUFFIX}'
            )
-       install(FILES ${PROJECT_BINARY_DIR}/src/main/musescore${MSCORE_INSTALL_SUFFIX} DESTINATION bin)
+       install(FILES ${PROJECT_BINARY_DIR}/src/main/musescore${MUSESCORE_INSTALL_SUFFIX} DESTINATION bin)
     else (LN_EXECUTABLE)
        add_custom_target(mscore_alias ALL COMMAND echo "No symlink aliases will be created." VERBATIM )
     endif (LN_EXECUTABLE)
